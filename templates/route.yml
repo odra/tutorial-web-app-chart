@@ -1,0 +1,12 @@
+apiVersion: route.openshift.io/v1 
+kind: Route
+metadata:
+  labels:
+    app: tutorial-web-app
+  name: tutorial-web-app
+spec:
+  tls:
+    termination: edge
+  to:
+    kind: Service
+    name: tutorial-web-app

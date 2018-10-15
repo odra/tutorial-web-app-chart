@@ -1,0 +1,50 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: tutorial-web-app
+  name: tutorial-web-app
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    app: tutorial-web-app
+  strategy:
+    rollingParams:
+      timeoutSeconds: 3600
+    type: Rolling
+  template:
+    metadata:
+      labels:
+        app: tutorial-web-app
+    spec:
+      containers:
+        -
+          env:
+            -
+              name: KUBERNETES_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            -
+              name: OPENSHIFT_OAUTHCLIENT_ID
+              value: {{.Values.openshift_oauthclient_id}}
+            -
+              name: OPENSHIFT_HOST
+              value: {{.Values.openshift_host}}
+            -
+              name: NODE_ENV
+              value: {{.Values.node_env}}
+          image: {{.Values.webapp_image}}:{{.Values.webapp_image_tag}}
+          imagePullPolicy: Always
+          name: tutorial-web-app
+          ports:
+          -
+            containerPort: 5001
+            name: http
+            protocol: TCP
+  metadata:
+    labels:
+      app: tutorial-web-app
+  triggers:
+    - type: ConfigChange

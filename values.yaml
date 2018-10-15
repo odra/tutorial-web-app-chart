@@ -1,0 +1,4 @@
+openshift_oauthclient_id: tutorial-web-app
+webapp_image: quay.io/integreatly/tutorial-web-app
+webapp_image_tag: master
+node_env: production
